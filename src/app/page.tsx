@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { stateData } from "@/lib/stateData";
+import { stateData } from "@/lib/data/stateData";
 
 export default function Home() {
   return (

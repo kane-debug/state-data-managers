@@ -1,0 +1,101 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model State {
+  id                  String           @id
+  name                String
+  capital             String
+  largestCity         String
+  statehood           String
+  nickname            String
+  population          Int
+  electoralVotes      Int
+  representativesCount Int
+  governor            Governor         @relation(fields: [governorId], references: [id])
+  governorId          String           @unique
+  senators            Senator[]
+  representatives     Representative[]
+  lastVerified        DateTime
+  createdAt           DateTime         @default(now())
+  updatedAt           DateTime         @updatedAt
+}
+
+model Governor {
+  id          String       @id @default(cuid())
+  name        String
+  party       String
+  since       String
+  imageUrl    String?
+  socialLinks SocialLink[]
+  state       State?
+  lastVerified DateTime
+  createdAt    DateTime    @default(now())
+  updatedAt    DateTime    @updatedAt
+}
+
+model Senator {
+  id          String       @id @default(cuid())
+  name        String
+  party       String
+  since       String
+  class       Int
+  imageUrl    String?
+  socialLinks SocialLink[]
+  state       State        @relation(fields: [stateId], references: [id])
+  stateId     String
+  lastVerified DateTime
+  createdAt    DateTime    @default(now())
+  updatedAt    DateTime    @updatedAt
+}
+
+model Representative {
+  id          String       @id @default(cuid())
+  name        String
+  party       String
+  district    Int
+  since       String
+  imageUrl    String?
+  socialLinks SocialLink[]
+  state       State        @relation(fields: [stateId], references: [id])
+  stateId     String
+  lastVerified DateTime
+  createdAt    DateTime    @default(now())
+  updatedAt    DateTime    @updatedAt
+}
+
+model SocialLink {
+  id               String         @id @default(cuid())
+  platform         String
+  url              String
+  governorId       String?
+  senatorId        String?
+  representativeId String?
+  governor         Governor?      @relation(fields: [governorId], references: [id])
+  senator          Senator?       @relation(fields: [senatorId], references: [id])
+  representative   Representative? @relation(fields: [representativeId], references: [id])
+  createdAt        DateTime       @default(now())
+  updatedAt        DateTime       @updatedAt
+}
+
+model DataUpdate {
+  id          String   @id @default(cuid())
+  entityType  String   // "governor", "senator", "representative"
+  entityId    String
+  field       String
+  oldValue    String?
+  newValue    String
+  source      String   // "congress_api", "propublica", "manual"
+  status      String   // "pending", "approved", "rejected"
+  verifiedBy  String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+} 

@@ -5,8 +5,6 @@ const nextConfig = {
       {
         protocol: "https",
         hostname: "placehold.co",
-        port: "",
-        pathname: "/**",
       },
       {
         protocol: "https",
@@ -20,6 +18,26 @@ const nextConfig = {
         protocol: "https",
         hostname: "firebasestorage.googleapis.com",
       },
+      {
+        protocol: "https",
+        hostname: "www.nga.org",
+      },
+      {
+        protocol: "https",
+        hostname: "*.gov",
+      },
+      {
+        protocol: "https",
+        hostname: "*.house.gov",
+      },
+      {
+        protocol: "https",
+        hostname: "*.senate.gov",
+      },
+      {
+        protocol: "https",
+        hostname: "www.flgov.com",
+      }
     ],
     dangerouslyAllowSVG: true,
     contentSecurityPolicy: "default-src 'self'; script-src 'none'; sandbox;",

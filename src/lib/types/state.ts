@@ -1,45 +1,46 @@
-export interface StateInfo {
+export interface State {
+  name: string;
   capital: string;
   largestCity: string;
   statehood: string;
   nickname: string;
   population: number;
-}
-
-export interface SocialLink {
-  platform: 'twitter' | 'facebook' | 'instagram' | 'website';
-  url: string;
-}
-
-export interface Governor {
-  name: string;
-  party: 'Democrat' | 'Republican' | 'Independent';
-  since: string;
-  imageUrl: string;
-  socialLinks: SocialLink[];
-}
-
-export interface Senator {
-  name: string;
-  party: 'Democrat' | 'Republican' | 'Independent';
-  since: string;
-  imageUrl: string;
-  socialLinks: SocialLink[];
-}
-
-export interface Representative {
-  name: string;
-  party: 'Democrat' | 'Republican' | 'Independent';
-  district: string;
-  since: string;
-  socialLinks: SocialLink[];
-}
-
-export interface State {
-  info: StateInfo;
+  electoralVotes: number;
+  representativesCount: number;
   governor: Governor;
   senators: Senator[];
   representatives: Representative[];
 }
 
-export type StateData = Record<string, State>; 
+export interface Governor {
+  name: string;
+  party: 'D' | 'R' | 'I';
+  since: string;
+  imageUrl?: string;
+  socialLinks?: SocialLink[];
+}
+
+export interface Senator {
+  name: string;
+  party: 'D' | 'R' | 'I';
+  since: string;
+  class?: 1 | 2 | 3;
+  imageUrl?: string;
+  socialLinks?: SocialLink[];
+}
+
+export interface Representative {
+  name: string;
+  party: 'D' | 'R' | 'I';
+  district: number;
+  since: string;
+  imageUrl?: string;
+  socialLinks?: SocialLink[];
+}
+
+export interface SocialLink {
+  platform: string;
+  url: string;
+}
+
+export type StateData = Record<string, State>;
