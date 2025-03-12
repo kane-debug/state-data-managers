@@ -1,4 +1,4 @@
-import { PrismaClient, Prisma } from '@prisma/client';
+import { PrismaClient } from '@prisma/client';
 import { FiAlertCircle, FiCheckCircle, FiClock, FiRefreshCw } from 'react-icons/fi';
 
 interface Update {
@@ -137,7 +137,7 @@ export default async function AdminDashboard() {
         </div>
         <div className="border-t border-gray-200">
           <ul role="list" className="divide-y divide-gray-200">
-            {stats.recentUpdates.map((update: Update) => (
+            {stats.recentUpdates.map((update) => (
               <li key={update.id} className="px-4 py-4 sm:px-6">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center">
