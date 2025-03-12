@@ -9,13 +9,14 @@ interface PendingUpdate {
   entityType: string;
   entityId: string;
   field: string;
-  oldValue: string;
+  oldValue: string | null;
   newValue: string;
   createdAt: Date;
+  status: string;
 }
 
 export default async function PendingUpdatesPage() {
-  const pendingUpdates = await prisma.update.findMany({
+  const pendingUpdates = await prisma.dataUpdate.findMany({
     where: { status: 'PENDING' },
     orderBy: { createdAt: 'desc' },
   });
