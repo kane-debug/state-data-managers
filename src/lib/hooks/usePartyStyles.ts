@@ -14,7 +14,7 @@ export function usePartyStyles(stateCode?: string) {
   const { isDarkMode } = useTheme();
   
   const getPartyStyles = (party: PartyAffiliation): PartyStyles => {
-    if (party === 'Republican') {
+    if (party === 'R') {
       return {
         bgColor: isDarkMode ? 'bg-red-900' : 'bg-red-600',
         textColor: 'text-white',
@@ -23,7 +23,7 @@ export function usePartyStyles(stateCode?: string) {
         lightBg: 'bg-red-50',
         darkBg: 'bg-red-900/20'
       };
-    } else {
+    } else if (party === 'D') {
       return {
         bgColor: isDarkMode ? 'bg-blue-900' : 'bg-blue-600',
         textColor: 'text-white',
@@ -32,13 +32,23 @@ export function usePartyStyles(stateCode?: string) {
         lightBg: 'bg-blue-50',
         darkBg: 'bg-blue-900/20'
       };
+    } else {
+      // Independent or other parties
+      return {
+        bgColor: isDarkMode ? 'bg-gray-900' : 'bg-gray-600',
+        textColor: 'text-white',
+        borderColor: isDarkMode ? 'border-gray-800' : 'border-gray-500',
+        hoverBg: isDarkMode ? 'hover:bg-gray-800' : 'hover:bg-gray-700',
+        lightBg: 'bg-gray-50',
+        darkBg: 'bg-gray-900/20'
+      };
     }
   };
 
   if (!stateCode) {
-    return getPartyStyles('Republican'); // Default for president's page
+    return getPartyStyles('R'); // Default for president's page
   }
 
   const stateData = stateGovernors[stateCode.toLowerCase()];
-  return getPartyStyles(stateData?.party || 'Republican');
+  return getPartyStyles(stateData?.party || 'R');
 } 
