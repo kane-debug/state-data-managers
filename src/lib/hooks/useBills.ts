@@ -1,6 +1,5 @@
 import { useState, useEffect } from 'react';
 import { Bill } from '@/lib/services/billService';
-import { billScraperService } from '@/lib/services/billScraperService';
 
 interface UseBillsOptions {
   state?: string;
