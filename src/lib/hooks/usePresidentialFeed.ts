@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Post } from '@/lib/types';
 
-type FeedType = 'all' | 'official' | 'social' | 'press';
+type FeedType = 'all' | 'official' | 'press' | 'action';
 
 // Mock data for initial state
 const mockPosts: Post[] = [
@@ -17,7 +17,9 @@ const mockPosts: Post[] = [
     updatedAt: new Date('2025-03-20T14:00:00'),
     topics: ['Infrastructure', 'Economy'],
     isOfficial: true,
-    type: 'official'
+    type: 'official',
+    source: 'White House',
+    sourceUrl: 'https://www.whitehouse.gov/briefings'
   },
   {
     id: '2',
@@ -31,7 +33,9 @@ const mockPosts: Post[] = [
     updatedAt: new Date('2025-03-19T18:30:00'),
     topics: ['Congress', 'Bipartisanship'],
     isOfficial: true,
-    type: 'press'
+    type: 'press',
+    source: 'Press Office',
+    sourceUrl: 'https://www.whitehouse.gov/press-briefings'
   },
   {
     id: '3',
@@ -45,7 +49,9 @@ const mockPosts: Post[] = [
     updatedAt: new Date('2025-03-18T20:15:00'),
     topics: ['ForeignPolicy'],
     isOfficial: false,
-    type: 'social'
+    type: 'action',
+    source: 'Presidential Actions',
+    sourceUrl: 'https://www.whitehouse.gov/actions'
   }
 ];
 
@@ -93,12 +99,12 @@ export function usePresidentialFeed(feedType: FeedType = 'all') {
   const filteredPosts = posts.filter(post => {
     if (feedType === 'all') return true;
     if (feedType === 'official') return post.isOfficial;
-    if (feedType === 'social') return post.type === 'social';
     if (feedType === 'press') return post.type === 'press';
+    if (feedType === 'action') return post.type === 'action';
     return true;
   });
 
-  const addPost = async (content: string, postType: 'official' | 'social' | 'press' = 'official') => {
+  const addPost = async (content: string, postType: 'official' | 'press' | 'action' = 'official') => {
     const newPost: Post = {
       id: String(Date.now()),
       authorId: 'president',
@@ -111,7 +117,17 @@ export function usePresidentialFeed(feedType: FeedType = 'all') {
       updatedAt: new Date(),
       topics: [],
       isOfficial: postType === 'official',
-      type: postType
+      type: postType,
+      source: postType === 'official' 
+        ? 'White House' 
+        : postType === 'press' 
+        ? 'Press Office' 
+        : 'Presidential Actions',
+      sourceUrl: postType === 'official' 
+        ? 'https://www.whitehouse.gov/briefings'
+        : postType === 'press'
+        ? 'https://www.whitehouse.gov/press-briefings'
+        : 'https://www.whitehouse.gov/actions'
     };
 
     try {
