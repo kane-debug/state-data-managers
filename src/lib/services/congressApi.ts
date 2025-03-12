@@ -1,4 +1,4 @@
-import { PrismaClient } from '@prisma/client';
+import { PrismaClient, Senator, Representative } from '@prisma/client';
 import axios from 'axios';
 
 const prisma = new PrismaClient();
@@ -15,6 +15,9 @@ interface CongressMember {
   facebook_account?: string;
   url?: string;
 }
+
+type SenatorUpdates = Partial<Pick<Senator, 'party'>>;
+type RepresentativeUpdates = Partial<Pick<Representative, 'party'>>;
 
 export class CongressApiService {
   private readonly apiKey: string;
@@ -53,18 +56,19 @@ export class CongressApiService {
 
         if (existingSenator) {
           // Check for changes
-          const updates: any = {};
+          const updates: SenatorUpdates = {};
           if (existingSenator.party !== senator.party) updates.party = senator.party;
           
           if (Object.keys(updates).length > 0) {
+            const field = Object.keys(updates)[0] as keyof SenatorUpdates;
             // Create pending update
             await prisma.dataUpdate.create({
               data: {
                 entityType: 'senator',
                 entityId: existingSenator.id,
-                field: Object.keys(updates)[0],
-                oldValue: existingSenator[Object.keys(updates)[0]],
-                newValue: updates[Object.keys(updates)[0]],
+                field,
+                oldValue: String(existingSenator[field]),
+                newValue: String(updates[field]),
                 source: 'congress_api',
                 status: 'pending'
               }
@@ -93,18 +97,19 @@ export class CongressApiService {
 
         if (existingRep) {
           // Check for changes
-          const updates: any = {};
+          const updates: RepresentativeUpdates = {};
           if (existingRep.party !== rep.party) updates.party = rep.party;
           
           if (Object.keys(updates).length > 0) {
+            const field = Object.keys(updates)[0] as keyof RepresentativeUpdates;
             // Create pending update
             await prisma.dataUpdate.create({
               data: {
                 entityType: 'representative',
                 entityId: existingRep.id,
-                field: Object.keys(updates)[0],
-                oldValue: existingRep[Object.keys(updates)[0]],
-                newValue: updates[Object.keys(updates)[0]],
+                field,
+                oldValue: String(existingRep[field]),
+                newValue: String(updates[field]),
                 source: 'congress_api',
                 status: 'pending'
               }
