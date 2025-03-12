@@ -1,5 +1,15 @@
-import { PrismaClient } from '@prisma/client';
+import { PrismaClient, Prisma } from '@prisma/client';
 import { FiAlertCircle, FiCheckCircle, FiClock, FiRefreshCw } from 'react-icons/fi';
+
+interface Update {
+  id: string;
+  entityType: string;
+  status: string;
+  field: string;
+  oldValue: string;
+  newValue: string;
+  createdAt: Date;
+}
 
 const prisma = new PrismaClient();
 
@@ -19,10 +29,7 @@ async function getStats() {
     prisma.state.count(),
     prisma.dataUpdate.findMany({
       take: 5,
-      orderBy: { createdAt: 'desc' },
-      include: {
-        verifiedBy: true
-      }
+      orderBy: { createdAt: 'desc' }
     })
   ]);
 
@@ -126,7 +133,7 @@ export default async function AdminDashboard() {
         </div>
         <div className="border-t border-gray-200">
           <ul role="list" className="divide-y divide-gray-200">
-            {stats.recentUpdates.map((update) => (
+            {stats.recentUpdates.map((update: Update) => (
               <li key={update.id} className="px-4 py-4 sm:px-6">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center">
