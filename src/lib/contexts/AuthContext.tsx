@@ -7,6 +7,7 @@ interface AuthContextType {
   loading: boolean;
   signIn: (username: string, password: string) => Promise<void>;
   signUp: (username: string, password: string) => Promise<void>;
+  signOut: () => Promise<void>;
 }
 
 export const AuthContext = createContext<AuthContextType>({
@@ -14,6 +15,7 @@ export const AuthContext = createContext<AuthContextType>({
   loading: true,
   signIn: async () => {},
   signUp: async () => {},
+  signOut: async () => {},
 });
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
@@ -77,8 +79,25 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     }
   };
 
+  const signOut = async () => {
+    try {
+      const response = await fetch('/api/auth/signout', {
+        method: 'POST',
+      });
+
+      if (!response.ok) {
+        throw new Error('Sign out failed');
+      }
+
+      setUser(null);
+    } catch (error) {
+      console.error('Error signing out:', error);
+      throw error;
+    }
+  };
+
   return (
-    <AuthContext.Provider value={{ user, loading, signIn, signUp }}>
+    <AuthContext.Provider value={{ user, loading, signIn, signUp, signOut }}>
       {children}
     </AuthContext.Provider>
   );
