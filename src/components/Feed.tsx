@@ -11,13 +11,17 @@ export default function Feed() {
       id: '1',
       authorId: 'user1',
       content: 'Discussing the new infrastructure bill and its implications for our communities. What are your thoughts?',
+      images: [],
       likes: [],
       reposts: [],
       comments: [],
       createdAt: new Date(),
       updatedAt: new Date(),
       topics: ['Infrastructure', 'Economy'],
-      isOfficial: true
+      isOfficial: true,
+      type: 'official',
+      source: 'Official Statement',
+      sourceUrl: 'https://example.com/statement'
     },
     // Add more mock posts as needed
   ])

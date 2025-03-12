@@ -28,6 +28,7 @@ export interface Post {
   type: 'press' | 'official' | 'speech' | 'action';
   source: string;
   sourceUrl: string;
+  topics: string[];
 }
 
 export interface Comment {
