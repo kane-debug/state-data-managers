@@ -5,11 +5,15 @@ import { createContext, useContext, useState, useEffect } from 'react';
 interface AuthContextType {
   user: any | null;
   loading: boolean;
+  signIn: (username: string, password: string) => Promise<void>;
+  signUp: (username: string, password: string) => Promise<void>;
 }
 
 export const AuthContext = createContext<AuthContextType>({
   user: null,
   loading: true,
+  signIn: async () => {},
+  signUp: async () => {},
 });
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
@@ -35,8 +39,46 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     checkSession();
   }, []);
 
+  const signIn = async (username: string, password: string) => {
+    try {
+      const response = await fetch('/api/auth/signin', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ username, password }),
+      });
+
+      if (!response.ok) {
+        throw new Error('Invalid credentials');
+      }
+
+      const data = await response.json();
+      setUser(data.user);
+    } catch (error) {
+      throw error;
+    }
+  };
+
+  const signUp = async (username: string, password: string) => {
+    try {
+      const response = await fetch('/api/auth/signup', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ username, password }),
+      });
+
+      if (!response.ok) {
+        throw new Error('Registration failed');
+      }
+
+      const data = await response.json();
+      setUser(data.user);
+    } catch (error) {
+      throw error;
+    }
+  };
+
   return (
-    <AuthContext.Provider value={{ user, loading }}>
+    <AuthContext.Provider value={{ user, loading, signIn, signUp }}>
       {children}
     </AuthContext.Provider>
   );
