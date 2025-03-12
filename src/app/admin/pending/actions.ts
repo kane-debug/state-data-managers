@@ -7,7 +7,7 @@ const prisma = new PrismaClient();
 
 export async function approve(updateId: string) {
   try {
-    const update = await prisma.update.findUnique({
+    const update = await prisma.dataUpdate.findUnique({
       where: { id: updateId },
     });
 
@@ -34,7 +34,7 @@ export async function approve(updateId: string) {
       }
 
       // Mark update as approved
-      await tx.update.update({
+      await tx.dataUpdate.update({
         where: { id: updateId },
         data: { status: 'APPROVED' },
       });
@@ -50,7 +50,7 @@ export async function approve(updateId: string) {
 
 export async function reject(updateId: string) {
   try {
-    await prisma.update.update({
+    await prisma.dataUpdate.update({
       where: { id: updateId },
       data: { status: 'REJECTED' },
     });
