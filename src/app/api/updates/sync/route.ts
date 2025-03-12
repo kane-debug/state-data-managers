@@ -1,17 +1,14 @@
 import { NextResponse } from 'next/server';
-import { PrismaClient } from '@prisma/client';
+import { PrismaClient, Senator, Representative } from '@prisma/client';
 import { fetchCurrentCongress, transformCongressData } from '@/lib/congress-api';
 
 const prisma = new PrismaClient();
 
 interface UpdateData {
-  firstName: string;
-  lastName: string;
+  name: string;
   party: string;
-  twitter: string | null;
-  facebook: string | null;
-  youtube: string | null;
-  website: string | null;
+  since: string;
+  imageUrl: string | null;
 }
 
 interface Update {
@@ -31,14 +28,14 @@ export async function POST() {
       const { entityType, state, data } = update;
 
       // Find existing record
-      let existingRecord;
+      let existingRecord: Senator | Representative | null;
       if (entityType === 'senator') {
         existingRecord = await prisma.senator.findFirst({
-          where: { state },
+          where: { stateId: state },
         });
       } else {
         existingRecord = await prisma.representative.findFirst({
-          where: { state },
+          where: { stateId: state },
         });
       }
 
@@ -49,18 +46,19 @@ export async function POST() {
 
       // Compare and create updates for changed fields
       const changes = Object.entries(data).filter(([key, value]) => {
-        return existingRecord[key] !== value && value !== null;
+        return existingRecord![key as keyof typeof data] !== value && value !== null;
       }) as [keyof UpdateData, string][];
 
       for (const [field, newValue] of changes) {
-        await prisma.update.create({
+        await prisma.dataUpdate.create({
           data: {
             entityType,
             entityId: existingRecord.id,
             field,
-            oldValue: existingRecord[field]?.toString() || '',
+            oldValue: existingRecord[field as keyof typeof data]?.toString() || '',
             newValue: newValue,
             status: 'PENDING',
+            source: 'congress_api'
           },
         });
       }
