@@ -3,12 +3,16 @@ import { FiAlertCircle, FiCheckCircle, FiClock, FiRefreshCw } from 'react-icons/
 
 interface Update {
   id: string;
-  entityType: string;
-  status: string;
-  field: string;
-  oldValue: string;
-  newValue: string;
   createdAt: Date;
+  updatedAt: Date;
+  status: string;
+  entityType: string;
+  entityId: string;
+  field: string;
+  oldValue: string | null;
+  newValue: string;
+  source: string;
+  verifiedBy: string | null;
 }
 
 const prisma = new PrismaClient();
@@ -154,7 +158,7 @@ export default async function AdminDashboard() {
                 <div className="mt-2 sm:flex sm:justify-between">
                   <div className="sm:flex">
                     <p className="flex items-center text-sm text-gray-500">
-                      {update.field}: {update.oldValue} → {update.newValue}
+                      {update.field}: {update.oldValue ?? 'N/A'} → {update.newValue}
                     </p>
                   </div>
                   <div className="mt-2 flex items-center text-sm text-gray-500 sm:mt-0">
