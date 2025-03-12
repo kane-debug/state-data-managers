@@ -1,6 +1,6 @@
 'use server';
 
-import { PrismaClient } from '@prisma/client';
+import { PrismaClient, Prisma } from '@prisma/client';
 import { revalidatePath } from 'next/cache';
 
 const prisma = new PrismaClient();
@@ -15,7 +15,7 @@ export async function approve(updateId: string) {
       throw new Error('Update not found');
     }
 
-    await prisma.$transaction(async (tx) => {
+    await prisma.$transaction(async (tx: Prisma.TransactionClient) => {
       // Update the entity
       if (update.entityType === 'senator') {
         await tx.senator.update({
