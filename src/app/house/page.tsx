@@ -210,7 +210,7 @@ export default function HousePage() {
       <div className="bg-white rounded-xl shadow-lg p-6 mt-8">
         <div className="max-w-3xl mx-auto text-center">
           <h2 className="text-2xl font-semibold text-gray-900 mb-4">Find Your Representative</h2>
-          <p className="text-gray-600 mb-6">Enter your ZIP code to find and connect with your district's representative</p>
+          <p className="text-gray-600 mb-6">Enter your ZIP code to find and connect with your district&apos;s representative</p>
           <div className="flex gap-4 max-w-md mx-auto">
             <input
               type="text"

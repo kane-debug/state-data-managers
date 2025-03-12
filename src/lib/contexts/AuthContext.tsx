@@ -1,27 +1,42 @@
 "use client";
 
-import React, { createContext, useContext, useState } from "react";
+import { createContext, useContext, useState, useEffect } from 'react';
 
 interface AuthContextType {
-  user: null;
+  user: any | null;
   loading: boolean;
 }
 
-const AuthContext = createContext<AuthContextType>({
+export const AuthContext = createContext<AuthContextType>({
   user: null,
-  loading: false,
+  loading: true,
 });
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
-  const [loading] = useState(false);
+  const [user, setUser] = useState<any | null>(null);
+  const [loading, setLoading] = useState(true);
 
-  const value = {
-    user: null,
-    loading,
-  };
+  useEffect(() => {
+    // Check session
+    const checkSession = async () => {
+      try {
+        const response = await fetch('/api/auth/session');
+        if (response.ok) {
+          const data = await response.json();
+          setUser(data.user);
+        }
+      } catch (error) {
+        console.error('Error checking session:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    checkSession();
+  }, []);
 
   return (
-    <AuthContext.Provider value={value}>
+    <AuthContext.Provider value={{ user, loading }}>
       {children}
     </AuthContext.Provider>
   );
