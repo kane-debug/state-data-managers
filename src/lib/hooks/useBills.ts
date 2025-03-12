@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { Bill } from '@/lib/services/billService';
 
 interface UseBillsOptions {
@@ -25,7 +25,7 @@ export function useBills({
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<Error | null>(null);
 
-  const fetchBills = async () => {
+  const fetchBills = useCallback(async () => {
     try {
       setLoading(true);
       let response;
@@ -61,7 +61,7 @@ export function useBills({
     } finally {
       setLoading(false);
     }
-  };
+  }, [state, useRealTimeData]);
 
   useEffect(() => {
     fetchBills();
@@ -70,7 +70,7 @@ export function useBills({
       const interval = setInterval(fetchBills, refreshInterval);
       return () => clearInterval(interval);
     }
-  }, [state, autoRefresh, refreshInterval, useRealTimeData]);
+  }, [state, autoRefresh, refreshInterval, useRealTimeData, fetchBills]);
 
   return {
     bills,
