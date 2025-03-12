@@ -2,16 +2,17 @@ import type { StateData } from '@/lib/types/state';
 
 export const stateData: StateData = {
   CA: {
-    info: {
-      capital: 'Sacramento',
-      largestCity: 'Los Angeles',
-      statehood: '1850',
-      nickname: 'The Golden State',
-      population: 39538223,
-    },
+    name: 'California',
+    capital: 'Sacramento',
+    largestCity: 'Los Angeles',
+    statehood: '1850',
+    nickname: 'The Golden State',
+    population: 39538223,
+    electoralVotes: 54,
+    representativesCount: 52,
     governor: {
       name: 'Gavin Newsom',
-      party: 'Democrat',
+      party: 'D',
       since: '2019',
       imageUrl: 'https://www.gov.ca.gov/wp-content/uploads/2019/01/Gavin-Newsom-1-150x150.jpg',
       socialLinks: [
@@ -24,7 +25,7 @@ export const stateData: StateData = {
     senators: [
       {
         name: 'Alex Padilla',
-        party: 'Democrat',
+        party: 'D',
         since: '2021',
         imageUrl: 'https://www.padilla.senate.gov/wp-content/uploads/2021/01/ap-official-portrait-150x150.jpg',
         socialLinks: [
@@ -35,7 +36,7 @@ export const stateData: StateData = {
       },
       {
         name: 'Laphonza Butler',
-        party: 'Democrat',
+        party: 'D',
         since: '2023',
         imageUrl: 'https://www.butler.senate.gov/wp-content/uploads/2023/10/butler-official-portrait-150x150.jpg',
         socialLinks: [
@@ -47,8 +48,8 @@ export const stateData: StateData = {
     representatives: [
       {
         name: 'Doug LaMalfa',
-        party: 'Republican',
-        district: '1st District',
+        party: 'R',
+        district: 1,
         since: '2013',
         socialLinks: [
           { platform: 'twitter', url: 'https://twitter.com/RepLaMalfa' },
