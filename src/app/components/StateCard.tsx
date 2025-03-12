@@ -63,7 +63,7 @@ const SocialLinks = ({ links }: { links: State['governor']['socialLinks'] }) => 
 export default function StateCard({ stateCode, state }: StateCardProps) {
   const [imageError, setImageError] = useState(false);
 
-  if (!state || !state.info) {
+  if (!state) {
     console.error('Invalid state data:', { stateCode, state });
     return (
       <div className="bg-white rounded-lg shadow-lg overflow-hidden p-6">
@@ -77,19 +77,19 @@ export default function StateCard({ stateCode, state }: StateCardProps) {
       <div className="p-6">
         <div className="flex justify-between items-start mb-6">
           <div>
-            <h2 className="text-2xl font-bold text-gray-800">{state.info.nickname}</h2>
+            <h2 className="text-2xl font-bold text-gray-800">{state.nickname}</h2>
             <p className="text-gray-600">State Code: {stateCode}</p>
           </div>
           <div className="text-right">
-            <p className="text-gray-600">Capital: {state.info.capital}</p>
-            <p className="text-gray-600">Largest City: {state.info.largestCity}</p>
+            <p className="text-gray-600">Capital: {state.capital}</p>
+            <p className="text-gray-600">Largest City: {state.largestCity}</p>
           </div>
         </div>
 
         <div className="mb-6">
           <h3 className="text-xl font-semibold text-gray-800 mb-3">Governor</h3>
           <div className="flex items-start gap-4">
-            {!imageError && (
+            {!imageError && state.governor.imageUrl && (
               <Image
                 src={state.governor.imageUrl}
                 alt={state.governor.name}
@@ -113,17 +113,19 @@ export default function StateCard({ stateCode, state }: StateCardProps) {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             {state.senators.map((senator) => (
               <div key={senator.name} className="flex items-start gap-4">
-                <Image
-                  src={senator.imageUrl}
-                  alt={senator.name}
-                  width={80}
-                  height={80}
-                  className="rounded-lg"
-                  onError={(e) => {
-                    const target = e.target as HTMLImageElement;
-                    target.style.display = 'none';
-                  }}
-                />
+                {senator.imageUrl && (
+                  <Image
+                    src={senator.imageUrl}
+                    alt={senator.name}
+                    width={80}
+                    height={80}
+                    className="rounded-lg"
+                    onError={(e) => {
+                      const target = e.target as HTMLImageElement;
+                      target.style.display = 'none';
+                    }}
+                  />
+                )}
                 <div>
                   <p className="font-medium text-gray-800">{senator.name}</p>
                   <p className="text-gray-600">{senator.party}</p>
