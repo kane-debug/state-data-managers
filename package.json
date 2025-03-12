@@ -20,6 +20,7 @@
     "axios": "^1.8.2",
     "date-fns": "^3.6.0",
     "dotenv": "^16.4.7",
+    "drizzle-kit": "^0.30.5",
     "drizzle-orm": "^0.40.0",
     "firebase": "^10.13.0",
     "framer-motion": "^11.3.31",
