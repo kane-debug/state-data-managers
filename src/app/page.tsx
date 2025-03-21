@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { stateData } from "@/lib/data/stateData";
+import Image from "next/image";
 
 export default function Home() {
   return (
@@ -7,16 +8,7 @@ export default function Home() {
       {/* Hero Section */}
       <section className="relative h-screen flex items-center justify-center bg-black dark:bg-black border-b border-border/40 dark:border-border/80">
         <div className="absolute inset-0">
-          <video
-            autoPlay
-            loop
-            muted
-            playsInline
-            className="w-full h-full object-cover opacity-80 dark:opacity-60"
-            poster="/images/capitol-poster.jpg"
-          >
-            <source src="/videos/capitol.mp4" type="video/mp4" />
-          </video>
+          <div className="w-full h-full bg-gradient-to-br from-primary/20 to-primary/10 dark:from-primary/40 dark:to-primary/30" />
           <div className="absolute inset-0 bg-black/40 dark:bg-black/60" />
         </div>
         <div className="relative z-10 text-center">

@@ -1,10 +1,50 @@
 import { Post } from '@/lib/types';
 
+interface SampleUpdate {
+  title: string;
+  content: string;
+  date: string;
+  type: 'press' | 'official' | 'speech' | 'action';
+  url: string;
+  summary: string;
+}
+
 const CACHE_KEY = 'presidential-updates';
 const INAUGURATION_DATE = new Date('2025-01-20T12:00:00Z');
 
+// Helper function to extract topics from text
+function extractTopics(update: SampleUpdate): string[] {
+  const topicSet = new Set<string>([
+    update.type,
+    ...update.title.toLowerCase().match(/(?:border security|economic|trade|energy|immigration|infrastructure)/gi) || [],
+    ...update.content.toLowerCase().match(/(?:border security|economic|trade|energy|immigration|infrastructure)/gi) || []
+  ]);
+  return Array.from(topicSet);
+}
+
+// Helper function to transform a single update to a post
+function transformUpdateToPost(update: SampleUpdate): Post {
+  const post: Post = {
+    id: update.url,
+    authorId: 'whitehouse',
+    content: `${update.title}\n\n${update.summary}`,
+    images: [],
+    likes: [],
+    reposts: [],
+    comments: [],
+    createdAt: new Date(update.date),
+    updatedAt: new Date(update.date),
+    isOfficial: true,
+    type: update.type,
+    source: 'whitehouse.gov',
+    sourceUrl: update.url,
+    topics: extractTopics(update)
+  };
+  return post;
+}
+
 // Current administration updates from 2025
-const SAMPLE_UPDATES = [
+const SAMPLE_UPDATES: SampleUpdate[] = [
   {
     title: "President Trump Signs Executive Order on Border Security",
     content: "President Trump signed a comprehensive Executive Order strengthening border security measures and implementing new immigration policies. The order includes provisions for enhanced wall construction and border patrol resources.",
@@ -65,24 +105,11 @@ const SAMPLE_UPDATES = [
 
 async function fetchPresidentialUpdates(forceRefresh = false): Promise<{ posts: Post[]; lastUpdated: Date | null }> {
   try {
-    // Convert sample updates to Post format and ensure they're after inauguration
-    const posts: Post[] = SAMPLE_UPDATES
-      .filter(update => new Date(update.date) >= INAUGURATION_DATE)
-      .map(update => ({
-        id: update.url,
-        authorId: 'whitehouse',
-        content: `${update.title}\n\n${update.summary}`,
-        images: [],
-        likes: [],
-        reposts: [],
-        comments: [],
-        createdAt: new Date(update.date),
-        updatedAt: new Date(update.date),
-        isOfficial: true,
-        type: update.type as 'press' | 'official' | 'speech' | 'action',
-        source: 'whitehouse.gov',
-        sourceUrl: update.url
-      }));
+    const filteredUpdates = SAMPLE_UPDATES.filter(update => 
+      new Date(update.date) >= INAUGURATION_DATE
+    );
+    
+    const posts = filteredUpdates.map(update => transformUpdateToPost(update));
 
     return {
       posts: posts.sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime()),
@@ -97,4 +124,5 @@ async function fetchPresidentialUpdates(forceRefresh = false): Promise<{ posts: 
   }
 }
 
+export type { SampleUpdate };
 export { fetchPresidentialUpdates }; 
