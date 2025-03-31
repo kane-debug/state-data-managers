@@ -1,11 +1,9 @@
-'use client';
-
-import { useState } from 'react';
 import Image from 'next/image';
 import { stateData } from '@/lib/data/stateData';
 import { notFound } from "next/navigation";
 import { FaTwitter, FaFacebook, FaGlobe } from 'react-icons/fa';
 import type { State } from '@/lib/types/state';
+import Link from 'next/link';
 
 interface StatePageProps {
   params: {
@@ -16,7 +14,6 @@ interface StatePageProps {
 export default function StatePage({ params }: StatePageProps) {
   const stateCode = params.code.toUpperCase();
   const stateInfo = stateData[stateCode] as State;
-  const [searchTerm, setSearchTerm] = useState('');
   
   if (!stateInfo) {
     notFound();
@@ -38,12 +35,6 @@ export default function StatePage({ params }: StatePageProps) {
   const gradientColors = stateInfo.governor.party === "R" 
     ? "from-red-700 to-red-500" 
     : "from-blue-700 to-blue-500";
-
-  const filteredRepresentatives = stateInfo.representatives.filter(rep =>
-    rep.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    rep.district.toString().includes(searchTerm) ||
-    rep.party.toLowerCase().includes(searchTerm.toLowerCase())
-  );
 
   return (
     <main className="min-h-screen bg-background text-foreground">
@@ -179,14 +170,19 @@ export default function StatePage({ params }: StatePageProps) {
         {/* Representatives Section */}
         <section>
           <h2 className="text-4xl font-bold mb-8">U.S. Representatives</h2>
+          <div className="mb-4">
+            <p className="text-lg text-muted-foreground">
+              {stateInfo.name} has {stateInfo.representativesCount} {stateInfo.representativesCount === 1 ? 'Representative' : 'Representatives'} in Congress
+            </p>
+          </div>
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {filteredRepresentatives.map((rep) => (
+            {stateInfo.representatives.map((rep) => (
               <div
                 key={rep.name}
                 className="bg-card hover:bg-card/80 border border-border/40 dark:border-border/80 rounded-3xl p-8 shadow-lg dark:shadow-2xl"
               >
-                <div className="flex flex-col gap-4">
-                  <div className="w-full h-48 relative rounded-xl overflow-hidden bg-muted">
+                <div className="flex flex-col gap-6">
+                  <div className="w-40 h-40 relative rounded-xl overflow-hidden bg-muted mx-auto">
                     {rep.imageUrl ? (
                       <Image
                         src={rep.imageUrl}
@@ -200,14 +196,15 @@ export default function StatePage({ params }: StatePageProps) {
                       </div>
                     )}
                   </div>
-                  <div>
+                  <div className="text-center">
                     <h3 className="text-2xl font-bold mb-2">{rep.name}</h3>
-                    <p className="text-lg text-muted-foreground">
-                      Party: {getFullPartyName(rep.party)}
-                    </p>
-                    <p className="text-muted-foreground mt-2">District {rep.district}</p>
-                    <p className="text-muted-foreground">Since: {rep.since}</p>
-                    <div className="mt-4 flex gap-4">
+                    <div className={`px-4 py-1 rounded-full text-white inline-flex items-center mx-auto mb-2
+                      ${rep.party === 'R' ? 'bg-red-600' : rep.party === 'D' ? 'bg-blue-600' : 'bg-gray-600'}`}>
+                      {getFullPartyName(rep.party)}
+                    </div>
+                    <p className="text-lg font-medium mb-1">District {rep.district}</p>
+                    <p className="text-muted-foreground mb-4">Since: {rep.since}</p>
+                    <div className="flex gap-4 justify-center">
                       {rep.socialLinks?.map((link) => (
                         <a
                           key={link.platform}

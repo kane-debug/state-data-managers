@@ -78,14 +78,17 @@ export default function Home() {
             <h2 className="text-6xl font-bold mb-6">50 States</h2>
             <p className="text-2xl font-light text-muted-foreground">One Nation, Infinite Possibilities</p>
           </div>
-          <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-6">
+          <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-4">
             {Object.entries(stateData).map(([code, state]) => (
-              <Link key={code} href={`/state/${code}`}>
-                <div className="group relative overflow-hidden aspect-square rounded-3xl bg-card hover:bg-card/80 dark:bg-card/20 dark:hover:bg-card/30 transition-all duration-500 border border-border/40 dark:border-border/80 hover:border-primary/40 dark:hover:border-primary/80 shadow-md hover:shadow-lg dark:shadow-2xl dark:shadow-primary/20">
-                  <div className="absolute inset-0 flex flex-col items-center justify-center p-6">
-                    <span className="text-4xl font-bold mb-2 text-card-foreground">{code}</span>
-                    <span className="text-lg font-light text-center text-muted-foreground">{state.name}</span>
-                  </div>
+              <Link 
+                key={code} 
+                href={`/state/${code}`}
+                className="group relative overflow-hidden rounded-xl bg-card hover:bg-card/80 dark:bg-card/20 dark:hover:bg-card/30 transition-all duration-300 border border-border/40 dark:border-border/80 hover:border-primary/40 dark:hover:border-primary/80 shadow-md hover:shadow-lg dark:shadow-2xl dark:shadow-primary/20 cursor-pointer"
+              >
+                <div className="aspect-square flex flex-col items-center justify-center p-4 text-center">
+                  <span className="text-3xl font-bold mb-2 text-card-foreground group-hover:text-primary transition-colors">{code}</span>
+                  <span className="text-sm font-medium text-muted-foreground group-hover:text-primary/80 transition-colors">{state.name}</span>
+                  <div className="absolute inset-0 bg-gradient-to-b from-transparent to-black/5 opacity-0 group-hover:opacity-100 transition-opacity" />
                 </div>
               </Link>
             ))}

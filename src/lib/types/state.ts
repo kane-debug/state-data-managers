@@ -24,7 +24,7 @@ export interface Senator {
   name: string;
   party: 'D' | 'R' | 'I';
   since: string;
-  class?: 1 | 2 | 3;
+  class: 1 | 2 | 3;
   imageUrl?: string;
   socialLinks?: SocialLink[];
 }
@@ -39,7 +39,7 @@ export interface Representative {
 }
 
 export interface SocialLink {
-  platform: string;
+  platform: 'website' | 'twitter' | 'facebook';
   url: string;
 }
 
